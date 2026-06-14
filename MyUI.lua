@@ -1,29 +1,31 @@
 --// ============================================ //--
---//         Groka UI Library v5                  //--
---//  Beautiful • Smooth • Feature-Rich • Fixed   //--
+--//         Groka UI Library v6                  //--
+--//  Classical • Smooth • Feature-Rich • Fixed   //--
 --//  Credits: Groka / ploitgptemailforsupport    //--
 --// ============================================ //--
 
 local GrokaUI = {}
 
+-- A more "classical" / muted palette: warm charcoal + brushed-brass accent
+-- instead of the generic AI purple/blue neon look.
 GrokaUI.Theme = {
-	Background   = Color3.fromRGB(10, 10, 16),
-	Surface      = Color3.fromRGB(18, 18, 28),
-	SurfaceHover = Color3.fromRGB(24, 24, 38),
-	Topbar       = Color3.fromRGB(14, 14, 22),
-	Accent       = Color3.fromRGB(108, 138, 255),
-	AccentDark   = Color3.fromRGB(72, 96, 220),
-	AccentGlow   = Color3.fromRGB(108, 138, 255),
-	Success      = Color3.fromRGB(52, 210, 128),
-	Danger       = Color3.fromRGB(235, 72, 72),
-	Text         = Color3.fromRGB(245, 245, 252),
-	SubText      = Color3.fromRGB(130, 132, 165),
-	Border       = Color3.fromRGB(36, 38, 58),
-	BorderLight  = Color3.fromRGB(52, 54, 78),
-	TabActive    = Color3.fromRGB(28, 30, 48),
-	TabInactive  = Color3.fromRGB(16, 16, 26),
-	Input        = Color3.fromRGB(22, 22, 36),
-	Track        = Color3.fromRGB(32, 34, 52),
+	Background   = Color3.fromRGB(24, 23, 22),
+	Surface      = Color3.fromRGB(34, 33, 31),
+	SurfaceHover = Color3.fromRGB(42, 40, 38),
+	Topbar       = Color3.fromRGB(28, 27, 26),
+	Accent       = Color3.fromRGB(196, 154, 90),   -- muted brass/gold
+	AccentDark   = Color3.fromRGB(150, 116, 64),
+	AccentGlow   = Color3.fromRGB(196, 154, 90),
+	Success      = Color3.fromRGB(122, 162, 102),  -- sage green
+	Danger       = Color3.fromRGB(176, 84, 72),    -- muted brick red
+	Text         = Color3.fromRGB(232, 228, 222),
+	SubText      = Color3.fromRGB(150, 146, 140),
+	Border       = Color3.fromRGB(54, 52, 50),
+	BorderLight  = Color3.fromRGB(70, 68, 64),
+	TabActive    = Color3.fromRGB(40, 38, 36),
+	TabInactive  = Color3.fromRGB(26, 25, 24),
+	Input        = Color3.fromRGB(30, 29, 27),
+	Track        = Color3.fromRGB(46, 44, 42),
 }
 
 GrokaUI.Icons = {
@@ -47,9 +49,10 @@ GrokaUI.Icons = {
 	Flash    = "rbxassetid://6031225086",
 	Map      = "rbxassetid://6031225082",
 	Music    = "rbxassetid://6031225080",
+	Palette  = "rbxassetid://6034509993",
 }
 
-GrokaUI.Credits = "Groka UI v5 • by Groka"
+GrokaUI.Credits = "Groka UI v6 • by Groka"
 
 local TweenService = game:GetService("TweenService")
 local UIS          = game:GetService("UserInputService")
@@ -106,6 +109,15 @@ local function addRipple(btn, color)
 	end)
 end
 
+-- HSV <-> Color3 helpers for the color picker
+local function hsvToColor3(h, s, v)
+	return Color3.fromHSV(h, s, v)
+end
+
+local function color3ToHsv(c)
+	return Color3.toHSV(c)
+end
+
 --// ============================
 --//  NOTIFICATIONS (unchanged)
 --// ============================
@@ -134,15 +146,15 @@ function GrokaUI:Notify(title, text, duration, typ)
 	duration = duration or 4
 	typ      = typ      or "info"
 	local colors = {
-		info    = Color3.fromRGB(100, 130, 255),
-		success = Color3.fromRGB(60,  200, 120),
-		error   = Color3.fromRGB(220, 70,  70),
-		warning = Color3.fromRGB(255, 180, 60),
+		info    = Color3.fromRGB(150, 150, 160),
+		success = Color3.fromRGB(122, 162, 102),
+		error   = Color3.fromRGB(176, 84, 72),
+		warning = Color3.fromRGB(196, 154, 90),
 	}
 	local accentColor = colors[typ] or colors.info
 	local frame = Instance.new("Frame")
 	frame.Size             = UDim2.new(0, 500, 0, 50)
-	frame.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
+	frame.BackgroundColor3 = Color3.fromRGB(34, 33, 31)
 	frame.Position         = UDim2.new(0.5, -250, 0, 100)
 	frame.ClipsDescendants = true
 	frame.Parent           = NotifyHolder
@@ -156,7 +168,7 @@ function GrokaUI:Notify(title, text, duration, typ)
 	titleLbl.Position               = UDim2.new(0, 12, 0, 7)
 	titleLbl.Text                   = tostring(title)
 	titleLbl.Font                   = Enum.Font.GothamBold
-	titleLbl.TextColor3             = Color3.new(1,1,1)
+	titleLbl.TextColor3             = Color3.fromRGB(232, 228, 222)
 	titleLbl.TextSize               = 15
 	titleLbl.TextXAlignment         = Enum.TextXAlignment.Left
 	titleLbl.Parent                 = frame
@@ -166,7 +178,7 @@ function GrokaUI:Notify(title, text, duration, typ)
 	body.Position               = UDim2.new(0, 12, 0, 24)
 	body.Text                   = tostring(text)
 	body.Font                   = Enum.Font.Gotham
-	body.TextColor3             = Color3.fromRGB(190, 190, 210)
+	body.TextColor3             = Color3.fromRGB(150, 146, 140)
 	body.TextSize               = 13
 	body.TextWrapped            = true
 	body.TextXAlignment         = Enum.TextXAlignment.Left
@@ -204,11 +216,11 @@ function GrokaUI:CreateWindow(title, subtitle, icon)
 	local shadowOuter = Instance.new("Frame")
 	shadowOuter.Size                   = UDim2.new(0, 610, 0, 510)
 	shadowOuter.Position               = UDim2.new(0.5, -305, 0.5, -255)
-	shadowOuter.BackgroundColor3       = T.Accent
+	shadowOuter.BackgroundColor3       = Color3.new(0, 0, 0)
 	shadowOuter.BackgroundTransparency = 0.92
 	shadowOuter.BorderSizePixel        = 0
 	shadowOuter.Parent                 = sg
-	addCorner(shadowOuter, 24)
+	addCorner(shadowOuter, 14)
 
 	local shadow = Instance.new("Frame")
 	shadow.Size                   = UDim2.new(0, 596, 0, 496)
@@ -217,7 +229,7 @@ function GrokaUI:CreateWindow(title, subtitle, icon)
 	shadow.BackgroundTransparency = 0.55
 	shadow.BorderSizePixel        = 0
 	shadow.Parent                 = sg
-	addCorner(shadow, 22)
+	addCorner(shadow, 12)
 
 	local main = Instance.new("Frame")
 	main.Size             = UDim2.new(0, 580, 0, 480)
@@ -225,50 +237,65 @@ function GrokaUI:CreateWindow(title, subtitle, icon)
 	main.BackgroundColor3 = T.Background
 	main.ClipsDescendants = true
 	main.Parent           = sg
-	addCorner(main, 18)
-	addStroke(main, T.Border, 0.35, 1)
+	addCorner(main, 10)
+	addStroke(main, T.Border, 0.25, 1)
 
 	main.Size     = UDim2.new(0, 560, 0, 460)
 	main.Position = UDim2.new(0.5, -280, 0.5, -230)
 	tween(main, { Size = UDim2.new(0, 580, 0, 480), Position = UDim2.new(0.5, -290, 0.5, -240) }, 0.35, Enum.EasingStyle.Back):Play()
 
 	-- TOP BAR
+	local TOPBAR_HEIGHT = 42
 	local topBar = Instance.new("Frame")
-	topBar.Size             = UDim2.new(1, 0, 0, 46)
+	topBar.Size             = UDim2.new(1, 0, 0, TOPBAR_HEIGHT)
 	topBar.Position         = UDim2.new(0, 0, 0, 0)
 	topBar.BackgroundColor3 = T.Topbar
 	topBar.BorderSizePixel  = 0
 	topBar.ZIndex           = 5
 	topBar.Parent           = main
-	addCorner(topBar, 18)
+	addCorner(topBar, 10)
 
 	local topBarFix = Instance.new("Frame")
-	topBarFix.Size             = UDim2.new(1, 0, 0, 18)
-	topBarFix.Position         = UDim2.new(0, 0, 1, -18)
+	topBarFix.Size             = UDim2.new(1, 0, 0, 12)
+	topBarFix.Position         = UDim2.new(0, 0, 1, -12)
 	topBarFix.BackgroundColor3 = T.Topbar
 	topBarFix.BorderSizePixel  = 0
 	topBarFix.Parent           = topBar
 
 	local accentLine = Instance.new("Frame")
-	accentLine.Size             = UDim2.new(1, 0, 0, 2)
-	accentLine.Position         = UDim2.new(0, 0, 1, -2)
+	accentLine.Size             = UDim2.new(1, 0, 0, 1)
+	accentLine.Position         = UDim2.new(0, 0, 1, -1)
 	accentLine.BackgroundColor3 = T.Accent
+	accentLine.BackgroundTransparency = 0.35
 	accentLine.BorderSizePixel  = 0
 	accentLine.ZIndex           = 6
 	accentLine.Parent           = topBar
-	local accentGrad = Instance.new("UIGradient")
-	accentGrad.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0,   T.Accent),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(140, 120, 255)),
-		ColorSequenceKeypoint.new(1,   T.AccentDark),
-	})
-	accentGrad.Parent = accentLine
 
-	-- Chrome buttons
-	local function makeChromeBtn(text, posX, hoverColor)
+	-- Title shown in topbar (used in minimized state, and as a small label)
+	local topBarTitle = Instance.new("TextLabel")
+	topBarTitle.BackgroundTransparency = 1
+	topBarTitle.Size                   = UDim2.new(1, -24, 1, 0)
+	topBarTitle.Position               = UDim2.new(0, 14, 0, 0)
+	topBarTitle.Text                   = title or "Groka UI"
+	topBarTitle.Font                   = Enum.Font.GothamBold
+	topBarTitle.TextSize               = 13
+	topBarTitle.TextColor3             = T.Text
+	topBarTitle.TextXAlignment         = Enum.TextXAlignment.Left
+	topBarTitle.TextTransparency       = 1 -- hidden until minimized
+	topBarTitle.ZIndex                 = 5
+	topBarTitle.Parent                 = topBar
+
+	-- Chrome buttons (close / minimise) — fixed sizing so they sit
+	-- fully inside the topbar with even padding on all sides.
+	local CHROME_SIZE = 26
+	local CHROME_PAD  = 8
+
+	local function makeChromeBtn(text, slot, hoverColor)
+		-- slot 0 = rightmost (close), slot 1 = next one (minimise), etc.
+		local xOffset = -(CHROME_PAD + (CHROME_SIZE + 6) * slot + CHROME_SIZE)
 		local btn = Instance.new("TextButton")
-		btn.Size             = UDim2.new(0, 30, 0, 30)
-		btn.Position         = UDim2.new(1, posX, 0.5, -15)
+		btn.Size             = UDim2.new(0, CHROME_SIZE, 0, CHROME_SIZE)
+		btn.Position         = UDim2.new(1, xOffset, 0.5, -CHROME_SIZE / 2)
 		btn.BackgroundColor3 = T.Surface
 		btn.Text             = text
 		btn.Font             = Enum.Font.GothamBold
@@ -277,22 +304,22 @@ function GrokaUI:CreateWindow(title, subtitle, icon)
 		btn.AutoButtonColor  = false
 		btn.ZIndex           = 6
 		btn.Parent           = topBar
-		addCorner(btn, 9)
-		local st = addStroke(btn, T.Border, 0.5)
+		addCorner(btn, 7)
+		local st = addStroke(btn, T.Border, 0.4)
 		btn.MouseEnter:Connect(function()
 			tween(btn, { BackgroundColor3 = hoverColor or T.SurfaceHover, TextColor3 = T.Text }, 0.15):Play()
-			tween(st,  { Transparency = 0.2 }, 0.15):Play()
+			tween(st,  { Transparency = 0.15 }, 0.15):Play()
 		end)
 		btn.MouseLeave:Connect(function()
 			tween(btn, { BackgroundColor3 = T.Surface, TextColor3 = T.SubText }, 0.15):Play()
-			tween(st,  { Transparency = 0.5 }, 0.15):Play()
+			tween(st,  { Transparency = 0.4 }, 0.15):Play()
 		end)
 		return btn
 	end
 
-	local close    = makeChromeBtn("✕", -28, T.Danger)
-	local minimise = makeChromeBtn("—", -66)
-	minimise.TextSize = 15
+	local close    = makeChromeBtn("✕", 0, T.Danger)
+	local minimise = makeChromeBtn("—", 1)
+	minimise.TextSize = 14
 
 	close.MouseEnter:Connect(function() tween(close, { BackgroundColor3 = T.Danger, TextColor3 = Color3.new(1,1,1) }, 0.15):Play() end)
 	close.MouseLeave:Connect(function() tween(close, { BackgroundColor3 = T.Surface, TextColor3 = T.SubText }, 0.15):Play() end)
@@ -304,27 +331,30 @@ function GrokaUI:CreateWindow(title, subtitle, icon)
 		sg:Destroy()
 	end)
 
-	-- Tabs row in top bar
+	-- Tabs row in top bar — width now reserves space for exactly 2
+	-- chrome buttons (close + minimise) so nothing overlaps/overflows.
+	local CHROME_RESERVED = CHROME_PAD + (CHROME_SIZE + 6) * 2 + 4
+
 	local tabsScrollFrame = Instance.new("ScrollingFrame")
-	tabsScrollFrame.Size                   = UDim2.new(1, -130, 1, -8)
-tabsScrollFrame.Position               = UDim2.new(0, 8, 0, 4)
-tabsScrollFrame.BackgroundTransparency = 1
-tabsScrollFrame.BorderSizePixel        = 0
+	tabsScrollFrame.Size                   = UDim2.new(1, -(CHROME_RESERVED + 110), 1, -8)
+	tabsScrollFrame.Position               = UDim2.new(0, 110, 0, 4)
+	tabsScrollFrame.BackgroundTransparency = 1
+	tabsScrollFrame.BorderSizePixel        = 0
 
-tabsScrollFrame.ScrollingDirection     = Enum.ScrollingDirection.X
-tabsScrollFrame.AutomaticCanvasSize    = Enum.AutomaticSize.X
-tabsScrollFrame.CanvasSize             = UDim2.new(0,0,0,0)
+	tabsScrollFrame.ScrollingDirection     = Enum.ScrollingDirection.X
+	tabsScrollFrame.AutomaticCanvasSize    = Enum.AutomaticSize.X
+	tabsScrollFrame.CanvasSize             = UDim2.new(0,0,0,0)
 
-tabsScrollFrame.ScrollBarThickness     = 4
-tabsScrollFrame.ScrollBarImageColor3   = T.Accent
-tabsScrollFrame.ScrollBarImageTransparency = 0.3
+	tabsScrollFrame.ScrollBarThickness     = 3
+	tabsScrollFrame.ScrollBarImageColor3   = T.Accent
+	tabsScrollFrame.ScrollBarImageTransparency = 0.4
 
-tabsScrollFrame.ZIndex                 = 5
-tabsScrollFrame.Parent                 = topBar
+	tabsScrollFrame.ZIndex                 = 5
+	tabsScrollFrame.Parent                 = topBar
 
 	local tabsRow = Instance.new("Frame")
-tabsRow.Size                   = UDim2.new(0, 0, 1, 0)
-tabsRow.AutomaticSize          = Enum.AutomaticSize.X
+	tabsRow.Size                   = UDim2.new(0, 0, 1, 0)
+	tabsRow.AutomaticSize          = Enum.AutomaticSize.X
 	tabsRow.BackgroundTransparency = 1
 	tabsRow.ZIndex                 = 5
 	tabsRow.Parent                 = tabsScrollFrame
@@ -337,64 +367,30 @@ tabsRow.AutomaticSize          = Enum.AutomaticSize.X
 	tabsRowLayout.Parent            = tabsRow
 
 	tabsRowLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-	tabsScrollFrame.CanvasSize = UDim2.new(
-		0,
-		tabsRowLayout.AbsoluteContentSize.X + 20,
-		0,
-		0
-	)
-end)
-
-	-- Minimise
-	local minimised = false
-	local fullH     = 480
-	local miniH     = 46
-
-	minimise.MouseButton1Click:Connect(function()
-		minimised = not minimised
-		if minimised then
-			tween(main,        { Size = UDim2.new(0, 580, 0, miniH) }, 0.25):Play()
-			tween(shadow,      { Size = UDim2.new(0, 596, 0, miniH + 14) }, 0.25):Play()
-			tween(shadowOuter, { Size = UDim2.new(0, 610, 0, miniH + 28) }, 0.25):Play()
-			minimise.Text = "□"
-		else
-			tween(main,        { Size = UDim2.new(0, 580, 0, fullH) }, 0.25):Play()
-			tween(shadow,      { Size = UDim2.new(0, 596, 0, fullH + 14) }, 0.25):Play()
-			tween(shadowOuter, { Size = UDim2.new(0, 610, 0, fullH + 28) }, 0.25):Play()
-			minimise.Text = "—"
-		end
+		tabsScrollFrame.CanvasSize = UDim2.new(
+			0,
+			tabsRowLayout.AbsoluteContentSize.X + 20,
+			0,
+			0
+		)
 	end)
-
-	-- Drag
-	do
-		local dragging, dragStart, startPos = false
-		topBar.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				dragging  = true
-				dragStart = input.Position
-				startPos  = main.Position
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then dragging = false end
-				end)
-			end
-		end)
-		local c = UIS.InputChanged:Connect(function(input)
-			if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-				local d = input.Position - dragStart
-				main.Position        = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
-				shadow.Position      = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X - 6, startPos.Y.Scale, startPos.Y.Offset + d.Y - 6)
-				shadowOuter.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X - 9, startPos.Y.Scale, startPos.Y.Offset + d.Y - 9)
-			end
-		end)
-		table.insert(connections, c)
-	end
 
 	-- MIDDLE SECTION
 	local middleArea = Instance.new("Frame")
-	middleArea.Size                   = UDim2.new(1, 0, 1, -46 - 36)
-	middleArea.Position               = UDim2.new(0, 0, 0, 46)
+	middleArea.Size                   = UDim2.new(1, 0, 1, -TOPBAR_HEIGHT - 36)
+	middleArea.Position               = UDim2.new(0, 0, 0, TOPBAR_HEIGHT)
 	middleArea.BackgroundTransparency = 1
 	middleArea.Parent                 = main
+
+	-- BOTTOM BAR
+	local bottomBar = Instance.new("Frame")
+	bottomBar.Size             = UDim2.new(1, 0, 0, 36)
+	bottomBar.Position         = UDim2.new(0, 0, 1, -36)
+	bottomBar.BackgroundColor3 = T.Topbar
+	bottomBar.BorderSizePixel  = 0
+	bottomBar.ZIndex           = 5
+	bottomBar.Parent           = main
+	addCorner(bottomBar, 10)
 
 	-- Left sidebar
 	local sidebar = Instance.new("Frame")
@@ -420,8 +416,8 @@ end)
 		iconBg.BackgroundColor3 = T.Surface
 		iconBg.ZIndex           = 4
 		iconBg.Parent           = sidebar
-		addCorner(iconBg, 14)
-		addStroke(iconBg, T.BorderLight, 0.5)
+		addCorner(iconBg, 10)
+		addStroke(iconBg, T.BorderLight, 0.4)
 
 		local img = Instance.new("ImageLabel")
 		img.Size                   = UDim2.new(0, 30, 0, 30)
@@ -472,18 +468,8 @@ end)
 	pagePad.PaddingTop   = UDim.new(0, 4)
 	pagePad.Parent       = pages
 
-	-- BOTTOM BAR
-	local bottomBar = Instance.new("Frame")
-	bottomBar.Size             = UDim2.new(1, 0, 0, 36)
-	bottomBar.Position         = UDim2.new(0, 0, 1, -36)
-	bottomBar.BackgroundColor3 = T.Topbar
-	bottomBar.BorderSizePixel  = 0
-	bottomBar.ZIndex           = 5
-	bottomBar.Parent           = main
-	addCorner(bottomBar, 18)
-
 	local bottomBarFix = Instance.new("Frame")
-	bottomBarFix.Size             = UDim2.new(1, 0, 0, 18)
+	bottomBarFix.Size             = UDim2.new(1, 0, 0, 12)
 	bottomBarFix.Position         = UDim2.new(0, 0, 0, 0)
 	bottomBarFix.BackgroundColor3 = T.Topbar
 	bottomBarFix.BorderSizePixel  = 0
@@ -506,8 +492,8 @@ end)
 	avatarImg.ScaleType        = Enum.ScaleType.Crop
 	avatarImg.ZIndex           = 6
 	avatarImg.Parent           = bottomBar
-	addCorner(avatarImg, 12)
-	addStroke(avatarImg, T.BorderLight, 0.5)
+	addCorner(avatarImg, 8)
+	addStroke(avatarImg, T.BorderLight, 0.4)
 
 	local playerNameLbl = Instance.new("TextLabel")
 	playerNameLbl.BackgroundTransparency = 1
@@ -551,12 +537,12 @@ end)
 			if i == index then
 				tween(tb.btn,       { BackgroundColor3 = T.TabActive }, 0.15):Play()
 				tween(tb.indicator, { BackgroundTransparency = 0 }, 0.2):Play()
-				tweenTabIcon(tb, Color3.new(1, 1, 1))
+				tweenTabIcon(tb, T.Text)
 				tween(tb.name, { TextColor3 = T.Text }, 0.15):Play()
 			else
 				tween(tb.btn,       { BackgroundColor3 = T.TabInactive }, 0.15):Play()
 				tween(tb.indicator, { BackgroundTransparency = 1 }, 0.15):Play()
-				tweenTabIcon(tb, Color3.fromRGB(180, 180, 200))
+				tweenTabIcon(tb, T.SubText)
 				tween(tb.name, { TextColor3 = T.SubText }, 0.15):Play()
 			end
 		end
@@ -565,6 +551,72 @@ end)
 	function Window:Destroy()
 		for _, c in pairs(connections) do pcall(function() c:Disconnect() end) end
 		sg:Destroy()
+	end
+
+	-- MINIMISE: collapse the window down to just the topbar, showing
+	-- only the title text plus the close (✕) and minimise (—) buttons.
+	local minimised  = false
+	local fullH      = 480
+	local miniH      = TOPBAR_HEIGHT
+
+	local function setMinimised(state)
+		minimised = state
+		if minimised then
+			tween(main,        { Size = UDim2.new(0, 580, 0, miniH) }, 0.25):Play()
+			tween(shadow,      { Size = UDim2.new(0, 596, 0, miniH + 14) }, 0.25):Play()
+			tween(shadowOuter, { Size = UDim2.new(0, 610, 0, miniH + 28) }, 0.25):Play()
+
+			-- Hide everything except the topbar's chrome buttons
+			middleArea.Visible = false
+			bottomBar.Visible  = false
+			tabsScrollFrame.Visible = false
+			topBarFix.Visible = false
+
+			tween(topBarTitle, { TextTransparency = 0 }, 0.15):Play()
+			minimise.Text = "▢"
+		else
+			tween(main,        { Size = UDim2.new(0, 580, 0, fullH) }, 0.25):Play()
+			tween(shadow,      { Size = UDim2.new(0, 596, 0, fullH + 14) }, 0.25):Play()
+			tween(shadowOuter, { Size = UDim2.new(0, 610, 0, fullH + 28) }, 0.25):Play()
+
+			tween(topBarTitle, { TextTransparency = 1 }, 0.1):Play()
+			task.delay(0.05, function()
+				middleArea.Visible = true
+				bottomBar.Visible  = true
+				tabsScrollFrame.Visible = true
+				topBarFix.Visible = true
+			end)
+
+			minimise.Text = "—"
+		end
+	end
+
+	minimise.MouseButton1Click:Connect(function()
+		setMinimised(not minimised)
+	end)
+
+	-- Drag (works whether minimised or not)
+	do
+		local dragging, dragStart, startPos = false
+		topBar.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				dragging  = true
+				dragStart = input.Position
+				startPos  = main.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then dragging = false end
+				end)
+			end
+		end)
+		local c = UIS.InputChanged:Connect(function(input)
+			if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+				local d = input.Position - dragStart
+				main.Position        = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+				shadow.Position      = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X - 6, startPos.Y.Scale, startPos.Y.Offset + d.Y - 6)
+				shadowOuter.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X - 9, startPos.Y.Scale, startPos.Y.Offset + d.Y - 9)
+			end
+		end)
+		table.insert(connections, c)
 	end
 
 	-- CREATE TAB
@@ -578,7 +630,7 @@ end)
 		button.AutoButtonColor  = false
 		button.ZIndex           = 6
 		button.Parent           = tabsRow
-		addCorner(button, 9)
+		addCorner(button, 7)
 
 		local btnPad = Instance.new("UIPadding")
 		btnPad.PaddingLeft  = UDim.new(0, 10)
@@ -613,7 +665,7 @@ end)
 		tabIcon.Size                   = UDim2.new(0, 16, 0, 16)
 		tabIcon.BackgroundTransparency = 1
 		tabIcon.Image                  = "rbxassetid://" .. tabNumericId
-		tabIcon.ImageColor3            = Color3.fromRGB(180, 180, 200)
+		tabIcon.ImageColor3            = T.SubText
 		tabIcon.ScaleType              = Enum.ScaleType.Fit
 		tabIcon.ZIndex                 = 8
 		tabIcon.Parent                 = btnInner
@@ -644,9 +696,9 @@ end)
 		page.BackgroundTransparency     = 1
 		page.BorderSizePixel            = 0
 		page.CanvasSize                 = UDim2.new(0, 0, 0, 0)
-		page.ScrollBarThickness         = 4
+		page.ScrollBarThickness         = 3
 		page.ScrollBarImageColor3       = T.Accent
-		page.ScrollBarImageTransparency = 0.3
+		page.ScrollBarImageTransparency = 0.4
 		page.Visible                    = false
 		page.Parent                     = pages
 		table.insert(tabPages, page)
@@ -675,8 +727,8 @@ end)
 			card.BackgroundColor3 = T.Surface
 			card.BorderSizePixel  = 0
 			card.Parent           = page
-			addCorner(card, 12)
-			addStroke(card, T.Border, 0.55)
+			addCorner(card, 8)
+			addStroke(card, T.Border, 0.45)
 			card.MouseEnter:Connect(function() tween(card, { BackgroundColor3 = T.SurfaceHover }, 0.15):Play() end)
 			card.MouseLeave:Connect(function() tween(card, { BackgroundColor3 = T.Surface }, 0.15):Play() end)
 			return card
@@ -727,7 +779,6 @@ end)
 		function Elements:AddButton(text, iconOrDesc, descOrCallback, callbackOrNil)
 			local btnIcon, desc, callback
 
-			-- detect if 2nd arg is an icon (string containing rbxassetid or numeric string)
 			if type(iconOrDesc) == "string" and (iconOrDesc:find("rbxassetid://") or iconOrDesc:match("^%d+$")) then
 				btnIcon  = iconOrDesc
 				desc     = type(descOrCallback) == "string" and descOrCallback or nil
@@ -741,7 +792,6 @@ end)
 			local h    = desc and 64 or 48
 			local card = makeCard(h)
 
-			-- Icon image before text
 			local textOffsetX = 16
 			if btnIcon then
 				local numId = parseAssetId(btnIcon)
@@ -790,18 +840,18 @@ end)
 			makeLabel(card, text, 16, desc and 10 or 14, 14, true, T.Text)
 			if desc then makeLabel(card, desc, 16, 32, 12, false, T.SubText) end
 			local track = Instance.new("Frame")
-			track.Size             = UDim2.new(0, 48, 0, 26)
-			track.Position         = UDim2.new(1, -62, 0.5, -13)
+			track.Size             = UDim2.new(0, 44, 0, 24)
+			track.Position         = UDim2.new(1, -60, 0.5, -12)
 			track.BackgroundColor3 = state and T.Success or T.Track
 			track.Parent           = card
-			addCorner(track, 13)
-			addStroke(track, T.Border, 0.6)
+			addCorner(track, 12)
+			addStroke(track, T.Border, 0.5)
 			local knob = Instance.new("Frame")
-			knob.Size             = UDim2.new(0, 20, 0, 20)
-			knob.Position         = state and UDim2.new(1,-23,0.5,-10) or UDim2.new(0,3,0.5,-10)
-			knob.BackgroundColor3 = Color3.new(1,1,1)
+			knob.Size             = UDim2.new(0, 18, 0, 18)
+			knob.Position         = state and UDim2.new(1,-21,0.5,-9) or UDim2.new(0,3,0.5,-9)
+			knob.BackgroundColor3 = Color3.fromRGB(232, 228, 222)
 			knob.Parent           = track
-			addCorner(knob, 10)
+			addCorner(knob, 9)
 			local btn = Instance.new("TextButton")
 			btn.BackgroundTransparency = 1
 			btn.Size                   = UDim2.new(1, 0, 1, 0)
@@ -809,7 +859,7 @@ end)
 			btn.Parent                 = card
 			local function applyState()
 				tween(track, { BackgroundColor3 = state and T.Success or T.Track }, 0.18):Play()
-				tween(knob,  { Position = state and UDim2.new(1,-23,0.5,-10) or UDim2.new(0,3,0.5,-10) }, 0.18, Enum.EasingStyle.Back):Play()
+				tween(knob,  { Position = state and UDim2.new(1,-21,0.5,-9) or UDim2.new(0,3,0.5,-9) }, 0.18, Enum.EasingStyle.Back):Play()
 			end
 			btn.MouseButton1Click:Connect(function()
 				state = not state
@@ -859,28 +909,25 @@ end)
 			valueLbl.TextSize               = 12
 			valueLbl.Parent                 = valueBg
 			local bar = Instance.new("Frame")
-			bar.Size             = UDim2.new(1, -32, 0, 8)
-			bar.Position         = UDim2.new(0, 16, 0, 46)
+			bar.Size             = UDim2.new(1, -32, 0, 6)
+			bar.Position         = UDim2.new(0, 16, 0, 47)
 			bar.BackgroundColor3 = T.Track
 			bar.Parent           = card
-			addCorner(bar, 4)
+			addCorner(bar, 3)
 			local fill = Instance.new("Frame")
 			fill.Size             = UDim2.new((value - min) / range, 0, 1, 0)
 			fill.BackgroundColor3 = T.Accent
 			fill.Parent           = bar
-			addCorner(fill, 4)
-			local fillGrad = Instance.new("UIGradient")
-			fillGrad.Color  = ColorSequence.new(T.Accent, T.AccentDark)
-			fillGrad.Parent = fill
+			addCorner(fill, 3)
 			local thumb = Instance.new("Frame")
 			thumb.Size             = UDim2.new(0, 14, 0, 14)
 			thumb.AnchorPoint      = Vector2.new(0.5, 0.5)
 			thumb.Position         = UDim2.new((value - min) / range, 0, 0.5, 0)
-			thumb.BackgroundColor3 = Color3.new(1, 1, 1)
+			thumb.BackgroundColor3 = Color3.fromRGB(232, 228, 222)
 			thumb.ZIndex           = 2
 			thumb.Parent           = bar
 			addCorner(thumb, 7)
-			addStroke(thumb, T.Accent, 0.3, 2)
+			addStroke(thumb, T.Accent, 0.2, 2)
 			local dragging = false
 			local function setVisual(pos)
 				value          = math.floor(min + range * pos)
@@ -929,16 +976,16 @@ end)
 			box.Font              = Enum.Font.Gotham
 			box.TextSize          = 13
 			box.Parent            = card
-			addCorner(box, 9)
-			local boxStroke = addStroke(box, T.Border, 0.55)
+			addCorner(box, 7)
+			local boxStroke = addStroke(box, T.Border, 0.45)
 			pcall(function()
 				box.Focused:Connect(function()
-					tween(boxStroke, { Color = T.Accent, Transparency = 0.2 }, 0.15):Play()
+					tween(boxStroke, { Color = T.Accent, Transparency = 0.15 }, 0.15):Play()
 					tween(box, { BackgroundColor3 = T.SurfaceHover }, 0.15):Play()
 				end)
 			end)
 			box.FocusLost:Connect(function()
-				tween(boxStroke, { Color = T.Border, Transparency = 0.55 }, 0.15):Play()
+				tween(boxStroke, { Color = T.Border, Transparency = 0.45 }, 0.15):Play()
 				tween(box, { BackgroundColor3 = T.Input }, 0.15):Play()
 				if callback then callback(box.Text) end
 			end)
@@ -1005,8 +1052,8 @@ end)
 				ob.TextSize         = 13
 				ob.AutoButtonColor  = false
 				ob.Parent           = holder
-				addCorner(ob, 10)
-				addStroke(ob, T.Border, 0.7)
+				addCorner(ob, 8)
+				addStroke(ob, T.Border, 0.6)
 				ob.MouseEnter:Connect(function()
 					if current ~= tostring(opt) then
 						tween(ob, { BackgroundColor3 = T.SurfaceHover, TextColor3 = T.Text }, 0.12):Play()
@@ -1052,8 +1099,8 @@ end)
 			bindBtn.TextSize         = 12
 			bindBtn.AutoButtonColor  = false
 			bindBtn.Parent           = card
-			addCorner(bindBtn, 8)
-			local bindStroke = addStroke(bindBtn, T.Border, 0.5)
+			addCorner(bindBtn, 7)
+			local bindStroke = addStroke(bindBtn, T.Border, 0.45)
 			bindBtn.MouseEnter:Connect(function() tween(bindBtn, { BackgroundColor3 = T.SurfaceHover }, 0.12):Play() end)
 			bindBtn.MouseLeave:Connect(function()
 				if not waiting then tween(bindBtn, { BackgroundColor3 = T.Input }, 0.12):Play() end
@@ -1062,7 +1109,7 @@ end)
 				if waiting then return end
 				waiting      = true
 				bindBtn.Text = "..."
-				tween(bindStroke, { Color = T.Accent, Transparency = 0.2 }, 0.15):Play()
+				tween(bindStroke, { Color = T.Accent, Transparency = 0.15 }, 0.15):Play()
 				local c
 				c = UIS.InputBegan:Connect(function(input, gp)
 					if gp then return end
@@ -1070,7 +1117,7 @@ end)
 						key          = input.KeyCode
 						bindBtn.Text = key.Name
 						waiting      = false
-						tween(bindStroke, { Color = T.Border, Transparency = 0.5 }, 0.15):Play()
+						tween(bindStroke, { Color = T.Border, Transparency = 0.45 }, 0.15):Play()
 						c:Disconnect()
 					end
 				end)
@@ -1080,6 +1127,257 @@ end)
 				if input.KeyCode == key and callback then callback() end
 			end)
 			table.insert(connections, c)
+		end
+
+		-- AddColorPicker: a swatch button that expands into an SV box,
+		-- a hue strip, and RGB number readouts.
+		-- Usage: Elements:AddColorPicker("Highlight Color", Color3.fromRGB(255,0,0), function(color) ... end)
+		function Elements:AddColorPicker(text, default, callback)
+			default = default or Color3.fromRGB(255, 255, 255)
+			local h, s, v = color3ToHsv(default)
+			local current = default
+			local open    = false
+
+			local collapsedH = 48
+			local SV_SIZE    = 130
+			local HUE_W      = 16
+			local openH      = collapsedH + 16 + SV_SIZE + 16 + 28
+
+			local card = makeCard(collapsedH)
+			card.ClipsDescendants = false
+			makeLabel(card, text, 16, 14, 14, true, T.Text)
+
+			-- swatch / toggle button
+			local swatch = Instance.new("TextButton")
+			swatch.Size             = UDim2.new(0, 34, 0, 22)
+			swatch.Position         = UDim2.new(1, -70, 0.5, -11)
+			swatch.BackgroundColor3 = current
+			swatch.Text             = ""
+			swatch.AutoButtonColor  = false
+			swatch.ZIndex           = 3
+			swatch.Parent           = card
+			addCorner(swatch, 6)
+			addStroke(swatch, T.Border, 0.4)
+
+			-- expandable picker area
+			local holder = Instance.new("Frame")
+			holder.BackgroundTransparency = 1
+			holder.Position               = UDim2.new(0, 16, 0, collapsedH)
+			holder.Size                   = UDim2.new(1, -32, 0, openH - collapsedH)
+			holder.Visible                = false
+			holder.Parent                 = card
+
+			-- SV box: pure-hue background, with a white-to-transparent
+			-- horizontal gradient and a black-to-transparent vertical
+			-- gradient layered on top. No external image assets needed.
+			local svBox = Instance.new("Frame")
+			svBox.Size             = UDim2.new(0, SV_SIZE, 0, SV_SIZE)
+			svBox.Position         = UDim2.new(0, 0, 0, 8)
+			svBox.BackgroundColor3 = hsvToColor3(h, 1, 1)
+			svBox.BorderSizePixel  = 0
+			svBox.ClipsDescendants = true
+			svBox.Active           = true
+			svBox.Parent           = holder
+			addCorner(svBox, 6)
+			addStroke(svBox, T.Border, 0.4)
+
+			-- white -> transparent (left to right) = saturation
+			local svWhite = Instance.new("Frame")
+			svWhite.Size                   = UDim2.new(1, 0, 1, 0)
+			svWhite.BackgroundColor3       = Color3.new(1, 1, 1)
+			svWhite.BorderSizePixel        = 0
+			svWhite.Parent                 = svBox
+			local svWhiteGrad = Instance.new("UIGradient")
+			svWhiteGrad.Color = ColorSequence.new(Color3.new(1,1,1), Color3.new(1,1,1))
+			svWhiteGrad.Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0),
+				NumberSequenceKeypoint.new(1, 1),
+			})
+			svWhiteGrad.Parent = svWhite
+
+			-- black -> transparent (top to bottom) = value
+			local svBlack = Instance.new("Frame")
+			svBlack.Size                   = UDim2.new(1, 0, 1, 0)
+			svBlack.BackgroundColor3       = Color3.new(0, 0, 0)
+			svBlack.BorderSizePixel        = 0
+			svBlack.Parent                 = svBox
+			local svBlackGrad = Instance.new("UIGradient")
+			svBlackGrad.Rotation = 90
+			svBlackGrad.Color = ColorSequence.new(Color3.new(0,0,0), Color3.new(0,0,0))
+			svBlackGrad.Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 1),
+				NumberSequenceKeypoint.new(1, 0),
+			})
+			svBlackGrad.Parent = svBlack
+
+			local svCursor = Instance.new("Frame")
+			svCursor.Size             = UDim2.new(0, 10, 0, 10)
+			svCursor.AnchorPoint      = Vector2.new(0.5, 0.5)
+			svCursor.Position         = UDim2.new(s, 0, 1 - v, 0)
+			svCursor.BackgroundColor3 = Color3.new(1, 1, 1)
+			svCursor.ZIndex           = 4
+			svCursor.Parent           = svBox
+			addCorner(svCursor, 5)
+			addStroke(svCursor, Color3.new(0, 0, 0), 0.3, 2)
+
+			-- Hue slider (vertical)
+			local hueBar = Instance.new("Frame")
+			hueBar.Size             = UDim2.new(0, HUE_W, 0, SV_SIZE)
+			hueBar.Position         = UDim2.new(0, SV_SIZE + 12, 0, 8)
+			hueBar.BackgroundColor3 = Color3.new(1, 1, 1)
+			hueBar.BorderSizePixel  = 0
+			hueBar.Active           = true
+			hueBar.Parent           = holder
+			addCorner(hueBar, 6)
+			addStroke(hueBar, T.Border, 0.4)
+
+			local hueGradient = Instance.new("UIGradient")
+			hueGradient.Rotation = 90
+			hueGradient.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0.000, Color3.fromHSV(0/6, 1, 1)),
+				ColorSequenceKeypoint.new(0.166, Color3.fromHSV(1/6, 1, 1)),
+				ColorSequenceKeypoint.new(0.333, Color3.fromHSV(2/6, 1, 1)),
+				ColorSequenceKeypoint.new(0.500, Color3.fromHSV(3/6, 1, 1)),
+				ColorSequenceKeypoint.new(0.666, Color3.fromHSV(4/6, 1, 1)),
+				ColorSequenceKeypoint.new(0.833, Color3.fromHSV(5/6, 1, 1)),
+				ColorSequenceKeypoint.new(1.000, Color3.fromHSV(6/6, 1, 1)),
+			})
+			hueGradient.Parent = hueBar
+
+			local hueCursor = Instance.new("Frame")
+			hueCursor.Size             = UDim2.new(1, 4, 0, 4)
+			hueCursor.AnchorPoint      = Vector2.new(0.5, 0.5)
+			hueCursor.Position         = UDim2.new(0.5, 0, h, 0)
+			hueCursor.BackgroundColor3 = Color3.new(1, 1, 1)
+			hueCursor.ZIndex           = 4
+			hueCursor.Parent           = hueBar
+			addCorner(hueCursor, 2)
+			addStroke(hueCursor, Color3.new(0, 0, 0), 0.3, 2)
+
+			-- Hex / RGB readout row
+			local readoutY = SV_SIZE + 16
+			local hexBox = Instance.new("TextBox")
+			hexBox.Size              = UDim2.new(0, 90, 0, 26)
+			hexBox.Position          = UDim2.new(0, 0, 0, readoutY)
+			hexBox.BackgroundColor3   = T.Input
+			hexBox.Text               = string.format("#%02X%02X%02X", current.R*255, current.G*255, current.B*255)
+			hexBox.TextColor3         = T.Text
+			hexBox.PlaceholderColor3  = T.SubText
+			hexBox.Font               = Enum.Font.GothamBold
+			hexBox.TextSize           = 12
+			hexBox.ClearTextOnFocus   = false
+			hexBox.Parent             = holder
+			addCorner(hexBox, 6)
+			addStroke(hexBox, T.Border, 0.45)
+
+			local previewSwatch = Instance.new("Frame")
+			previewSwatch.Size             = UDim2.new(0, 26, 0, 26)
+			previewSwatch.Position         = UDim2.new(0, 98, 0, readoutY)
+			previewSwatch.BackgroundColor3 = current
+			previewSwatch.Parent           = holder
+			addCorner(previewSwatch, 6)
+			addStroke(previewSwatch, T.Border, 0.4)
+
+			local arrow = Instance.new("TextLabel")
+			arrow.BackgroundTransparency = 1
+			arrow.Size                   = UDim2.new(0, 20, 0, 20)
+			arrow.Position               = UDim2.new(1, -8, 0, collapsedH/2 - 10)
+			arrow.AnchorPoint             = Vector2.new(1, 0)
+			arrow.Text                   = "▾"
+			arrow.Font                   = Enum.Font.GothamBold
+			arrow.TextSize               = 12
+			arrow.TextColor3             = T.SubText
+			arrow.Parent                 = card
+
+			local function updateAll(skipHex)
+				current = hsvToColor3(h, s, v)
+				swatch.BackgroundColor3         = current
+				previewSwatch.BackgroundColor3  = current
+				svBox.BackgroundColor3          = hsvToColor3(h, 1, 1)
+				svCursor.Position                = UDim2.new(s, 0, 1 - v, 0)
+				hueCursor.Position                = UDim2.new(0.5, 0, h, 0)
+				if not skipHex then
+					hexBox.Text = string.format("#%02X%02X%02X", current.R*255, current.G*255, current.B*255)
+				end
+				if callback then callback(current) end
+			end
+
+			-- SV dragging
+			local svDragging = false
+			local function setSV(input)
+				local rel = Vector2.new(
+					math.clamp((input.Position.X - svBox.AbsolutePosition.X) / svBox.AbsoluteSize.X, 0, 1),
+					math.clamp((input.Position.Y - svBox.AbsolutePosition.Y) / svBox.AbsoluteSize.Y, 0, 1)
+				)
+				s = rel.X
+				v = 1 - rel.Y
+				updateAll()
+			end
+			svBox.InputBegan:Connect(function(i)
+				if i.UserInputType == Enum.UserInputType.MouseButton1 then
+					svDragging = true
+					setSV(i)
+				end
+			end)
+			svBox.InputEnded:Connect(function(i)
+				if i.UserInputType == Enum.UserInputType.MouseButton1 then svDragging = false end
+			end)
+
+			-- Hue dragging
+			local hueDragging = false
+			local function setHue(input)
+				local rel = math.clamp((input.Position.Y - hueBar.AbsolutePosition.Y) / hueBar.AbsoluteSize.Y, 0, 1)
+				h = rel
+				updateAll()
+			end
+			hueBar.InputBegan:Connect(function(i)
+				if i.UserInputType == Enum.UserInputType.MouseButton1 then
+					hueDragging = true
+					setHue(i)
+				end
+			end)
+			hueBar.InputEnded:Connect(function(i)
+				if i.UserInputType == Enum.UserInputType.MouseButton1 then hueDragging = false end
+			end)
+
+			local moveConn = UIS.InputChanged:Connect(function(i)
+				if i.UserInputType == Enum.UserInputType.MouseMovement then
+					if svDragging then setSV(i) end
+					if hueDragging then setHue(i) end
+				end
+			end)
+			table.insert(connections, moveConn)
+
+			-- Hex input -> color
+			hexBox.FocusLost:Connect(function()
+				local hexStr = hexBox.Text:gsub("#", "")
+				if #hexStr == 6 and hexStr:match("^%x+$") then
+					local r = tonumber(hexStr:sub(1,2), 16) / 255
+					local g = tonumber(hexStr:sub(3,4), 16) / 255
+					local b = tonumber(hexStr:sub(5,6), 16) / 255
+					h, s, v = color3ToHsv(Color3.new(r, g, b))
+					updateAll(true)
+				else
+					hexBox.Text = string.format("#%02X%02X%02X", current.R*255, current.G*255, current.B*255)
+				end
+			end)
+
+			local function setOpen(state)
+				open          = state
+				holder.Visible = open
+				arrow.Text     = open and "▴" or "▾"
+				tween(card, { Size = UDim2.new(1, -2, 0, open and openH or collapsedH) }, 0.22):Play()
+			end
+
+			swatch.MouseButton1Click:Connect(function() setOpen(not open) end)
+
+			local Picker = {}
+			function Picker:Get() return current end
+			function Picker:Set(c)
+				h, s, v = color3ToHsv(c)
+				updateAll()
+			end
+			return Picker
 		end
 
 		return Elements

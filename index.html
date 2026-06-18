@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Groka UI Documentation</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:#0c0c12;
+    color:white;
+    overflow:hidden;
+}
+
+.container{
+    display:flex;
+    height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    background:#101018;
+    border-right:1px solid #28283c;
+    padding:18px;
+    overflow-y:auto;
+}
+
+.logo{
+    margin-bottom:25px;
+}
+
+.logo h1{
+    font-size:32px;
+    font-weight:800;
+}
+
+.logo p{
+    color:#8f8fa9;
+    margin-top:4px;
+    font-size:13px;
+}
+
+.tab{
+    width:100%;
+    padding:14px 16px;
+    border:none;
+    outline:none;
+    border-radius:16px;
+    margin-bottom:10px;
+    background:#1c1c2a;
+    color:#a0a0c0;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.2s;
+    text-align:left;
+    border:1px solid #2c2c40;
+}
+
+.tab:hover{
+    background:#25253a;
+}
+
+.tab.active{
+    background:#6482ff;
+    color:white;
+    border-color:#7e95ff;
+    box-shadow:0 0 20px rgba(100,130,255,0.35);
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    overflow-y:auto;
+    padding:35px;
+}
+
+.card{
+    background:#14141e;
+    border:1px solid #28283c;
+    border-radius:26px;
+    padding:28px;
+    animation:fade 0.25s ease;
+    box-shadow:0 10px 40px rgba(0,0,0,0.35);
+}
+
+.title{
+    font-size:34px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.desc{
+    color:#a0a0c0;
+    line-height:1.7;
+    margin-bottom:28px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:#6482ff;
+}
+
+.code{
+    background:#0f0f17;
+    border:1px solid #2d2d42;
+    border-radius:18px;
+    padding:18px;
+    white-space:pre-wrap;
+    overflow-x:auto;
+    color:#d6dcff;
+    font-size:14px;
+    margin-bottom:30px;
+}
+
+.params{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.param{
+    background:#181824;
+    border:1px solid #2d2d42;
+    border-radius:16px;
+    padding:16px;
+}
+
+.param-name{
+    color:#6482ff;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.param-type{
+    color:#8f8fa9;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#6482ff;
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-track{
+    background:#101018;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="sidebar">
+
+        <div class="logo">
+            <h1>Groka UI</h1>
+            <p>v5 Documentation</p>
+        </div>
+        
+                <button class="tab" onclick="showTab('loadstring', this)">Loadstring</button>
+        <button class="tab active" onclick="showTab('window', this)">Window</button>
+        <button class="tab" onclick="showTab('tab', this)">Tab</button>
+        <button class="tab" onclick="showTab('section', this)">Section</button>
+        <button class="tab" onclick="showTab('button', this)">Button</button>
+        <button class="tab" onclick="showTab('toggle', this)">Toggle</button>
+        <button class="tab" onclick="showTab('slider', this)">Slider</button>
+        <button class="tab" onclick="showTab('input', this)">Input</button>
+        <button class="tab" onclick="showTab('dropdown', this)">Dropdown</button>
+        <button class="tab" onclick="showTab('keybind', this)">Keybind</button>
+        <button class="tab" onclick="showTab('label', this)">Label</button>
+        <button class="tab" onclick="showTab('paragraph', this)">Paragraph</button>
+        <button class="tab" onclick="showTab('notify', this)">Notify</button>
+
+    </div>
+
+    <div class="main">
+
+        <!-- WINDOW -->
+
+        <div class="card page" id="window">
+
+            <div class="title">Window</div>
+
+            <div class="desc">
+                Creates the main Groka UI window with dragging, minimizing, closing, tabs, and animations.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+local Window = Library:CreateWindow("Groka Hub", "Best UI Library")
+            </div>
+
+        </div>
+
+        <!-- TAB -->
+
+        <div class="card page" id="tab" style="display:none">
+
+            <div class="title">Tab</div>
+
+            <div class="desc">
+                Creates a tab inside the window.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+local MainTab = Window:CreateTab("Main", "🏠")
+            </div>
+
+        </div>
+
+        <!-- SECTION -->
+
+        <div class="card page" id="section" style="display:none">
+
+            <div class="title">Section</div>
+
+            <div class="desc">
+                Creates a section divider.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddSection("Combat")
+            </div>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <div class="card page" id="button" style="display:none">
+
+            <div class="title">Button</div>
+
+            <div class="desc">
+                Creates a clickable button with ripple effects.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddButton("Kill All", "Executes attack", function()
+    print("Clicked")
+end)
+            </div>
+
+        </div>
+
+        <!-- TOGGLE -->
+
+        <div class="card page" id="toggle" style="display:none">
+
+            <div class="title">Toggle</div>
+
+            <div class="desc">
+                Creates a smooth animated toggle switch.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddToggle("Auto Farm", "Automatically farms", false, function(v)
+    print(v)
+end)
+            </div>
+
+        </div>
+
+        <!-- SLIDER -->
+
+        <div class="card page" id="slider" style="display:none">
+
+            <div class="title">Slider</div>
+
+            <div class="desc">
+                Creates a draggable value slider.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddSlider("WalkSpeed", 16, 100, 16, function(v)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
+end)
+            </div>
+
+        </div>
+
+        <!-- INPUT -->
+
+        <div class="card page" id="input" style="display:none">
+
+            <div class="title">Input</div>
+
+            <div class="desc">
+                Creates a textbox input field.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddInput("Player Name", "Enter username", function(text)
+    print(text)
+end)
+            </div>
+
+        </div>
+
+        <!-- DROPDOWN -->
+
+        <div class="card page" id="dropdown" style="display:none">
+
+            <div class="title">Dropdown</div>
+
+            <div class="desc">
+                Creates an expandable dropdown menu.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddDropdown("Select Weapon", {"Sword","Gun","Knife"}, function(v)
+    print(v)
+end)
+            </div>
+
+        </div>
+
+        <!-- KEYBIND -->
+
+        <div class="card page" id="keybind" style="display:none">
+
+            <div class="title">Keybind</div>
+
+            <div class="desc">
+                Creates a customizable keybind.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddKeybind("Toggle UI", Enum.KeyCode.RightShift, function()
+    print("Pressed")
+end)
+            </div>
+
+        </div>
+
+        <!-- LABEL -->
+
+        <div class="card page" id="label" style="display:none">
+
+            <div class="title">Label</div>
+
+            <div class="desc">
+                Creates an editable text label.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+local Label = MainTab:AddLabel("Status: Idle")
+
+Label:Set("Status: Running")
+            </div>
+
+        </div>
+
+        <!-- PARAGRAPH -->
+
+        <div class="card page" id="paragraph" style="display:none">
+
+            <div class="title">Paragraph</div>
+
+            <div class="desc">
+                Creates a paragraph card with title and body text.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+MainTab:AddParagraph("Information", "Groka UI is smooth.")
+            </div>
+
+        </div>
+
+        <!-- NOTIFY -->
+
+        <div class="card page" id="notify" style="display:none">
+
+            <div class="title">Notify</div>
+
+            <div class="desc">
+                Creates animated notifications.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+Library:Notify("Success", "Loaded successfully", 5, "success")
+            </div>
+
+        </div>
+
+        <!-- LOADSTRING -->
+
+        <div class="card page" id="loadstring" style="display:none">
+
+            <div class="title">Loadstring</div>
+
+            <div class="desc">
+                Loads the Groka UI Library directly from GitHub using loadstring.
+            </div>
+
+            <div class="section-title">Syntax</div>
+
+            <div class="code">
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/ploitgptemailforsupport-stack/GrokaUI/refs/heads/main/MyUI.lua"))()
+            </div>
+
+            <div class="section-title">Example</div>
+
+            <div class="code">
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/ploitgptemailforsupport-stack/GrokaUI/refs/heads/main/MyUI.lua"))()
+
+local Window = Library:CreateWindow("Groka Hub", "Best UI")
+
+local Main = Window:CreateTab("Main", "🏠")
+
+Main:AddButton("Print Hello", "Example button", function()
+    print("Hello")
+end)
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function showTab(id, btn){
+
+    document.querySelectorAll(".page").forEach(function(page){
+        page.style.display = "none";
+    });
+
+    document.querySelectorAll(".tab").forEach(function(tab){
+        tab.classList.remove("active");
+    });
+
+    document.getElementById(id).style.display = "block";
+
+    btn.classList.add("active");
+}
+</script>
+
+</body>
+</html>
